@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue基本公文</title>
+</head>
+<body>
+    <div id="app">
+        <!-- v-htmlでHTMLのタグを読み込める（タグが生成される） -->
+        <!-- クロスサイトスプリティングの脆弱性があるので要注意 -->
+        <div>{{ html }}</div>
+        <div v-html="html"></div>
+
+        <!-- v-bindは引数を取るディレクティブ（値を2つ取るもの） -->
+        <!-- 省略も可能 -->
+        <a v-bind:href="url">Google</a>
+        <a :href="url">Google</a>
+        <!-- attributeをscriptから読み取る動的な動き -->
+        <a :[attribute]="url">Google</a>
+        <!-- オブジェクト型の指定 -->
+        <a v-bind="{href: urlTwitter, id: number}">Twitter</a>
+        <!-- scriptでオブジェクトを指定 -->
+        <a v-bind="twitterObject">Twitter</a>
+
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                html: '<h1>h1です</h1>',
+                url: 'https://google.com',
+                urlTwitter: 'https://twitter.com',
+                number: 31,
+                attribute: 'href',
+                twitterObject: {
+                    href: 'https://twitter.com',
+                    id: 31
+                }
+            },
+            methods: {
+                
+            }
+        });
+    </script>
+</body>
+</html>
