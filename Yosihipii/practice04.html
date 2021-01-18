@@ -8,7 +8,30 @@
 <body>
     <div id="app">
         <p>現在{{ number }}回クリックされています</p>
-        <button v-on:click="number += 1">カウントアップ</button>
+        <!-- どちらも" "が必要な点に注意-->
+        <button v-on:click="number += 1">カウントアップ</button><br>
+        <!-- この書き方が主流 -->
+        <!-- (引数)指定 -->
+        <button v-on:click="countUp(2)">カウントアップ</button><br>
+        <!-- v-bindのように省略形も可能（＠） -->
+        <button @[event]="countUp(2)">カウントアップ</button>
+
+        <!-- イベント収束値 -->
+        <!-- eventは特別な引数として$eventと書く（methodsで指定した引数の順番とリンクさせる） -->
+        <!-- この処理だとpタグとspanタグでバブリングが起きてしまう（デフォルトで） -->
+        <p v-on:mousemove="changeMousePosition($event, 10)">マウスを乗せてください
+        <!-- イベント収束値：v-on:mousemove="noEvent"の処理と同じ動きができる -->
+        <!-- stop = stopPropagation -->
+        <span v-on:mousemove.stop>反応しないゾーン</span></p>
+        <p>X:{{ x }},Y:{{ y }}</p>
+        <!-- prevent = preventDefault -->
+        <!-- ここではaタグのデフォルトの挙動を止めている -->
+        <a v-on:click.prevent href="https://google.com">Google</a>
+        <br>
+
+        <!-- キー収束値 -->
+        <!-- 特定のキーを押した時にイベントを起こすように指定できる(つなげることも可能) -->
+        <input type="text" v-on:keyup.enter.space="myAlert">
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
@@ -16,10 +39,37 @@
         new Vue({
             el: "#app",
             data: {
-                number:0
+                number:0,
+                x:0,
+                y:0,
+                event:'click'
             },
             methods: {
-                
+                countUp: function(times) {
+                    // thisは必須の指定
+                    // timesには上記の引数（2）が入る
+                    this.number += 1*times;
+                },
+                changeMousePosition: function(event, divideNumber) {
+                    // divideNumberには上で指定した（10）が入る
+                    this.x = event.clientX / divideNumber;
+                    this.y = event.clientY / divideNumber;
+                },
+                // noEvent: function(event) {
+                //     preventDefault = デフォルトで起こる挙動を妨げる
+                //     毎回書く一般的な処理
+                //     event.preventDefault();
+                // }
+
+                // noEvent: function() {
+                //     バブリングを防ぐのがstopPropagation
+                //     毎回書く一般的な処理
+                //     event.stopPropagation();
+                // }
+
+                myAlert: function() {
+                    alert('アラート');
+                }
             }
         });
     </script>
