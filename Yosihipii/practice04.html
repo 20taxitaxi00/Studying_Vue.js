@@ -31,7 +31,13 @@
 
         <!-- キー収束値 -->
         <!-- 特定のキーを押した時にイベントを起こすように指定できる(つなげることも可能) -->
-        <input type="text" v-on:keyup.enter.space="myAlert">
+        <input type="text" v-on:keyup.enter.space="myAlert"><br>
+
+        <!-- v-model -->
+        <!-- 双方向のデータバインディングをおこなう -->
+        <!-- inputの中身とscript内のmessageが結びついている -->
+        <input type="text" v-model="comment">
+        <h1>{{ comment }}</h1>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
@@ -42,7 +48,8 @@
                 number:0,
                 x:0,
                 y:0,
-                event:'click'
+                event:'click',
+                comment: 'こんにちは'
             },
             methods: {
                 countUp: function(times) {
