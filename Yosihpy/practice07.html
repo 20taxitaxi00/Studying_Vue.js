@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue基本公文</title>
+
+    <style>
+        .red {
+            color: red;
+        }
+
+        .bg-blue {
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 1つ目の方法(オブジェクト) -->
+        <!-- クラスのバインディングをオブジェクト形式で -->
+        <!-- bg-blueのようにハイフンを用いているものには''が必要' -->
+        <h1 :class="classObject">Hello</h1>
+        <button @click="isActive = !isActive">切り替え</button>
+        <!-- 2つ目の方法（配列） -->
+        <h1 :class="[{red: isActive}, bg]">Hello</h1>
+
+        <!-- インラインスタイルのバインディング -->
+        <!-- 1つ目（オブジェクト） -->
+        <h1 :style="{ color: textColor, 'background-color': bgColor }">Hello</h1>
+        <!-- 上記よりも下のオブジェクト型の方がGood! -->
+        <h1 :style="styleObject">Hello</h1>
+        <!-- 2つ目（配列） -->
+        <!-- スタイルオブジェクトが溢れてきた時、複数のオブジェクトを使用する時に配列 -->
+        <h1 :style="[styleObject, baseStyles]">Hello</h1>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                isActive: true,
+                color: 'red',
+                bg: 'bg-blue',
+                textColor: 'red',
+                bgColor: 'blue',
+                styleObject: {
+                    color: 'red',
+                    'background-color': 'blue'
+                },
+                baseStyles: {
+                    fontSize: '60px'
+                }
+            },
+            computed: {
+                classObject: function() {
+                    return {
+                        red: this.isActive,
+                        'bg-blue': !this.isActive
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
