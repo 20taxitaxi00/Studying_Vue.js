@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レンダリング</title>
+</head>
+<body>
+    <!-- v-forディレクティブ -->
+    <h1>v-forディレクティブを使用するときはkey属性を絶対に使用すること！！</h1>
+    <div id="app">
+        <ul>
+            <!-- 右側にレンダリングさせたいオブジェクトを書く -->
+            <!-- fruitが引数のようなものになる -->
+            <!-- index（何でもいい）で何番目かを表示できる(エイリアス) -->
+            <!-- in　は　of　に変換することも可能 -->
+            <li v-for="(fruit, index) in fruits">({{ index }}){{ fruit }}</li>
+        </ul>
+
+        <!-- オブジェクト型 -->
+        <ul>
+            <li v-for="(value, key, index) in object">({{ index }}){{ key }}-{{ value }}</li>
+        </ul>
+        <hr>
+
+        <!-- templateを使用 -->
+        <ul>
+            <template v-for="fruit in fruits">
+                <li>{{ fruit }}</li>
+                <hr>
+            </template>
+        </ul>
+
+        <!-- 整数値の指定 -->
+        <ul>
+            <li v-for="n in 10">{{ n }}</li>
+        </ul>
+        <hr>
+
+        <!-- key属性の使用 -->
+        <!-- 要素の移動を最小限に抑えるアルゴリズムを使用し、可能な限りその場で同じようなタイプの要素を再利用しようとする -->
+        <!-- 配列が削除されてもインプットタグがそのままな理由 -->
+        <ul>
+            <!-- keyを指定することでグループに一意がつく（関連づけられる） -->
+            <!-- ただし、templateでkeyの指定ができない（DOMに表示されないから） -->
+            <!-- indexでは関連づけられない（削除するとindexが変化するから） -->
+            <div v-for="fruit in fruits" v-bind:key="fruit">
+                <p>{{ fruit }}</p>
+                <input type="text">
+            </div>
+        </ul>
+        <button @click="remove">先頭を削除</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                fruits: ['apple', 'banana', 'grape'],
+                object: {
+                    firstNme: '太郎',
+                    lastName: '田中',
+                    age: 21
+                }
+            },
+            methods: {
+                remove: function() {
+                    // shiftは配列の先頭を削除する関数
+                    this.fruits.shift()
+                }
+            }
+        });
+    </script>
+</body>
+</html>

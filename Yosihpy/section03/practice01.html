@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レンダリング</title>
+</head>
+<body>
+    <!-- 条件付きレンダリング -->
+    <div id="app">
+        <p v-if="ok">OK!</p>
+        <!-- v-if="ok"がfalseだったらv-else-ifの処理へ -->
+        <P v-else-if="maybeOk">maybe OK!</P>
+        <!-- v-elseはv-ifの真下に来ないといけない -->
+        <p v-else>Not OK...</p><br>
+
+        <!-- templateタグは生成されない -->
+        <!-- 条件分岐をグループ化する時に使用するといい -->
+        <template v-if="ok">
+            <p>Hello</p>
+            <p>Good Bye</p>
+            <p>おはよう</p>
+        </template>
+        <button @click="ok = !ok">ボタン</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                ok: true, 
+                maybeOk: true,
+            }
+        });
+    </script>
+</body>
+</html>
