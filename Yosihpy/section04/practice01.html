@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vueインスタンスとその内部構造</title>
+</head>
+<body>
+    <!-- 同時に複数のVueインスタンスは作成できる -->
+    <!-- ただし、ロジックが複雑になるのでなるべく1つのインスタンスにする -->
+    <div id="app1">
+        <p>{{ message }}</p>
+    </div>
+    <div id="app2">
+        <p>{{ message }}</p>
+        <button @click="changeMessage1">インスタンス1のmessageを変更</button>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <!-- 【大前提！】　JavaScriptは基本的に上から下に読み込まれる -->
+    <script>
+        var vm1 = new Vue({
+            el: '#app1',
+            data: {
+                message:'インスタンス1'
+            },
+        });
+        // 上記のVueインスタンスを変数に入れることで外部から読み込める！
+        vm1.message = '書き換えました！';
+
+        var vm2 = new Vue({
+            el: '#app2',
+            data: {
+                message:'インスタンス2'
+            },
+            methods: {
+                // Vueインスタンスを変数化すれば外部の関数にも使える
+                changeMessage1: function() {
+                    vm1.message = 'インスタンス2から変えました';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

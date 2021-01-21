@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vueインスタンス</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{ message }}</p>
+        <p>{{ name }}</p>
+        <p>{{ myData }}</p>
+        <hello></hello>
+        <hello></hello>
+        <!-- 外部から追加されたプロパティだからリアクティブにならない！！ -->
+        <button @click="name = 'ボタンから変更'">変更</button>
+    </div>
+
+    <!-- templateプロパティの例 -->
+    <div id="app2">
+        <!-- <h1>Hello {{ name }}</h1> -->
+    </div>
+
+    <!-- render関数の例 -->
+    <div id="app3"></div>
+
+    <!-- Vueインスタンスのライフサイクルを確認 -->
+    <div id="app4">
+        <h1>こんにちは、{{ name }}</h1>
+        <button @click="name = '太郎さん'">名前を変更</button>
+        <button @click="destroy">インスタンスを破壊</button>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script>
+        // Vueインスタンスの中にこのdataをいれてもできる（JavaScriptっぽい書き方）
+        var data = {
+            message: 'こんにちは',
+            name: 'よしぴー'
+        }
+
+        // 同じようなインスタンスの使い回し　＝　component
+        // Vue.component('コンポーネントの名前', 'Vueインスタンスの値（違いあり）')
+        Vue.component('hello', {
+            template: '<p>こんにちは</p>'
+        });
+
+        var vm = new Vue({
+            // el: '#app',  下で指定
+            // リアクティブにする条件は、dataにその対象を置くこと！！
+            data: data,
+            computed: {
+                myData: function() {
+                    return this.$data;
+                }
+            }
+        });
+        // $mountでインスタンス内にelプロパティがなくても代わりにできる
+        vm.$mount('#app');
+
+        // VueインスタンスにGetterとSetterがついているか確認（Watcher）
+        console.log(vm);
+        // Vueインスタンスのオブジェクトには＄がついている
+        console.log(vm.$data);
+        // 変数dataとインスタンス内のdataが一緒であることの証明
+        console.log(data === vm.$data);
+
+        // templateプロパティの例
+        new Vue({
+            data: {
+                name: 'よしぴー'
+            },
+            template: '<h1>Hello {{ name }}</h1>'
+        }).$mount('#app2')
+
+        // render関数の例
+        new Vue({
+            data: {
+                name: 'よしぴー'
+            },
+            // 直接DOMにアクセスしているわけではなく、仮想DOMとして間接的にアクセスしている！
+            // 仮想DOMとは、DOM要素を模したJavaScriptのオブジェクト
+            // 直接DOMを操作する(新しいDOMを作る)のは非常に重くてパフォーマンスが落ちる
+            // 仮想DOMはJavaScript上にコードとして存在する　＝　超絶早くアクセスできる
+            // 変更前と変更後で仮想DOMを用いるから早い！！
+            render: function(createElement) {
+                console.log(createElement('h1', 'Hello ' + this.name));
+                return createElement('h1', 'Hello ' + this.name);
+            }
+        }).$mount('#app3')
+        // renderの比較対象
+        // documentオブジェクトはブラウ上にあるのでアクセスに時間がかかる！！
+        var dir = document.createElement('div');
+        console.log(dir);
+        console.dir(dir);
+        console.log(document);
+        console.dir(document);
+
+        // Vueインスタンスのライフサイクルを確認
+        new Vue({
+            el: '#app4',
+            data: {
+                name: 'よしぴー'
+            },
+            beforeCreate: function() {
+                console.log('beforeCreate');
+            },
+            created: function() {
+                console.log('created');
+            },
+            beforeMount: function() {
+                console.log('beforeMount');
+            },
+            mounted: function() {
+                console.log('mounted');
+            },
+            beforeUpdate: function() {
+                console.log('beforeUpdate');
+            },
+            updated: function() {
+                console.log('updated');
+            },
+            beforeDestroy: function() {
+                console.log('beforeDestroy');
+            },
+            destroyed: function() {
+                console.log('destroyed');
+            },
+            methods: {
+                destroy: function() {
+                    // destroyはこのVueインスタンスごと破壊する
+                    // つまりdestroyの処理以降はリアクティブにはならない
+                    this.$destroy();
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>
