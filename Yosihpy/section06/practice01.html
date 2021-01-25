@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue CLI</title>
+</head>
+<body>
+    <!-- CLI　＝　コマンドラインインターフェイス -->
+    <!-- ①ファイルの分割 -->
+    <!-- ②最終的なコードの軽量化 -->
+    <!-- ③Babel、TypeScript、ESLintなどのプラグインの使用 -->
+    <!-- ④HMR（コードの保存のみで変更を反映できる） -->
+    <!-- ⑤.vue、TypeScript、SCSS、Pug、ES6などの使用 -->
+    <div id="app">
+        <my-component></my-component>
+        <my-component></my-component>
+        <my-component></my-component>
+    </div>
+    <hr>
+    <div id="app2">
+        <my-component></my-component>
+        <my-component></my-component>
+        <my-component></my-component>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script>
+        // ローカル登録
+        // 特定のインスタンス内で使用できる
+        // 基本的にはローカル登録を使用する（あまり使用しないグローバルが残るのを防ぐため）
+        var component = {
+            data: function(){
+                return {
+                    number:7
+                };
+            },
+            template: '<p>いいね({{number}})<button @click="increment">+1</button></p>',
+            methods: {
+                increment: function(){
+                    this.number += 1;
+                }
+            }
+        }
+
+        // グローバル登録(どのインスタンスでも使えるようになる)
+        Vue.component('my-component', {
+            // コンポーネントの中では、データは関数である必要がある！
+            // 関数にすることで、それぞれのcomponentで別のデータになる！
+            // 例：それぞれにボタンにつけてもそれぞれだけで加算される。
+            data: function(){
+                return {
+                    number: 12
+                };
+            },
+            template: '<p>いいね({{number}})<button @click="increment">+1</button></p>',
+            methods: {
+                increment: function() {
+                    this.number += 1;
+                }
+            }
+        })
+
+        new Vue({
+            el: '#app',
+            // ローカル登録したものを呼び出す
+            components: {
+                // 第1引数にはコンポーネント名　第2引数にはローカル登録の変数名
+                'my-component': component
+            }
+        })
+
+        new Vue({
+            el: '#app2',
+        })
+    </script>
+</body>
+</html>
